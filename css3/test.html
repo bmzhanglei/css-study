@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src='./test.js'></script>
+</head>
+<body>
+    <input onchange="getFile(this)" id='file1' type="file"/>
+    <img  src="" alt="">
+    <script>
+        function getFile(e){
+            var file = document.getElementById("file1").files[0];
+            var img = window.URL.createObjectURL(file);
+            document.querySelector('img').setAttribute('src',img);
+        }
+
+//     var a = 99;            // 全局变量a
+// f();                   // f是函数，虽然定义在调用的后面，但是函数声明会提升到作用域的顶部。 
+// console.log(a);        // a=>99,  此时是全局变量的a
+// function f() {
+//   console.log(a);      // 当前的a变量是下面变量a声明提升后，默认值undefined
+//   var a = 10;
+//   console.log(a);      // a => 10
+// }
+
+// var a = [{name:'lisi',age:12},{name:'张三',age:9}];
+// var a2 = a.map((value,key)=>{
+//     // console.log(key,value);
+//     value.check=false;
+//     return value;
+// })
+// console.log(a2)
+
+// function clone(data){
+//     let model = {}; 
+//     for (let item in data) {
+//       console.log(Object.prototype.toString.call(data[item]));
+//       if ( data[item] instanceof Array ) {
+//         model[item]=new Array();
+//         for (let i = 0; i < data[item].length; i++) {
+         
+//           model[item].push(this.clone(data[item][i]));
+//         }
+//       } else {
+//         model[item] = data[item];
+//       } 
+//     }
+//     return model;
+// }
+
+function clone3(obj){
+    if(obj instanceof Array){
+        return obj.slice();
+    }else{
+        return  Object.create(
+                Object.getPrototypeOf(obj),
+                Object.getOwnPropertyDescriptors(obj)
+            )
+    }   
+} 
+
+// Object.prototype.clone = function(){ 
+//     var arrBool = this.constructor === Array;
+//     var objBool = this.constructor === Object;
+//     var copy = arrBool ? [] : {}; //#1
+//     if(arrBool||objBool){
+//         for(var e in this){
+//             if (typeof this[e]  === "object") { //#2
+//                 copy[e] =  this[e].clone(); 
+//             } else if (typeof this[e]  === "function") { //#3
+//             // debugger
+//                 copy[e] =   this[e].bind(copy); //#5
+//             } else { //#4
+//                 copy[e] =  this[e]; 
+//             }
+//         }
+//     }else{       
+//         copy = this;
+//     }
+//     return copy;
+//   }
+
+
+// var arr = [{a:1,b:{bb:'bb'}},{c:'cc'},999];
+// var arr2 = {aa:{a:1,b:{bb:function(){return 9}}},c:'cc'};
+// var brr = arr2.clone();
+// brr[2]=98
+// brr.aa.b.bb = 'dd';
+// console.log(arr2)
+// console.log(brr)
+// console.log(JSON.stringify(arr2));
+// console.log(JSON.stringify(brr));
+
+// var d = function(x){return x+999};
+// var dd=d.clone();
+// // dd=87
+// console.log(dd(33));
+// console.log(d(2));
+
+
+
+// function Foo(name,age){
+//     this.name = name
+// }
+// Foo.prototype.alertName = function(){
+//     alert(this.name);
+// }
+
+// var f = new Foo('zhangsan');
+// f.printName = function(){
+//     console.log(this.name);
+// }
+
+// f.printName();
+// // f.alertName();
+// console.log(f.__proto__.__proto__ == Object.prototype)
+// console.log(JSON.stringify(f.toString()) );
+
+function curry(fn,args){
+    var length = fn.length;
+    console.log(length)
+    args = args || [];
+    return function(){
+        // var _args = [].slice.apply(arguments);
+        var _args = [...arguments];
+        _args = _args.concat(args);
+        if(_args.length < length){
+            return curry.call(this,fn,_args);
+        }else{
+            return fn.apply(this,_args)
+        }
+    }
+}
+
+// function add(){
+//     var arr = [...arguments];
+//     console.log(arr)
+//     if(arr.length>1){
+//        return arr.reduce(function(a,b){
+//            return a + b;
+//        })
+//     }else{
+//         return arr[0];
+//     }    
+// }
+
+// console.log(add()) 
+
+// var addc = curry(add);
+// console.log(addc(3)(3))
+
+// function add() {
+//     // 第一次执行时，定义一个数组专门用来存储所有的参数
+//     var _args = Array.prototype.slice.call(arguments);
+
+//     // 在内部声明一个函数，利用闭包的特性保存_args并收集所有的参数值
+//     var _adder = function() {
+//         _args.push(...arguments);
+//         return _adder;
+//     };
+
+//     // 利用toString隐式转换的特性，当最后执行时隐式转换，并计算最终的值返回
+//     _adder.toString = function () {
+//         return _args.reduce(function (a, b) {
+//             return a + b;
+//         });
+//     }
+//     return _adder();
+// }
+
+// console.log(add(1,2))
+
+// const throttle = (fun, delay, ...rest) => {
+//     let last = null;
+//     return () => {
+//         const now = + new Date();
+//         if (now - last > delay) {
+//             fun(rest);
+//             last = now;
+//         }
+//     }
+// }
+// const throttleExample  = throttle(() => console.log(1), 1000,2,3);
+// throttleExample(1);
+// throttleExample(2);
+// throttleExample(3);
+
+
+// const debouce = (fun, delay, ...rest) => {
+//     let timer = null;
+//     return () => {
+//         clearTimeout(timer);
+//         timer = setTimeout(() => {
+//             fun(rest);
+//         }, delay);
+//     }
+// }
+// //实例
+// const debouceExample = debouce(() => console.log(1), 1000);
+// //调用
+// debouceExample();
+// debouceExample();
+// debouceExample();
+
+
+var quickSort = function(arr) {
+    console.log(Date.now());
+　　if (arr.length <= 1) { return arr; }
+　　var pivot = arr.splice(0, 1)[0];
+　　var left = [];
+　　var right = [];
+　　for (var i = 0; i < arr.length; i++){
+　　　　if (arr[i] < pivot) {
+　　　　　　left.push(arr[i]);
+　　　　} else {
+　　　　　　right.push(arr[i]);
+　　　　}
+　　}
+console.log(Date.now());
+　　return quickSort(left).concat([pivot], quickSort(right));
+};
+
+function sortarr(arr){
+    for(i=0;i<arr.length-1;i++){
+        for(j=0;j<arr.length-1-i;j++){
+            if(arr[j]>arr[j+1]){
+                var temp=arr[j];
+                arr[j]=arr[j+1];
+                arr[j+1]=temp;
+            }
+        }
+    }    
+    return arr;
+}
+
+
+var arrs = [];
+function sortMath(arr){  
+    console.log(Date.now()) 
+    var max = Math.max(...arr);
+    var set = new Set([max]);   
+    var res  = new Set([...arr].filter(res=>!set.has(res)));//差集
+
+    // var res = arr.filter(res=>!set.has(res));
+//    debugger
+    if([...res].length>0){      
+        arrs.push(max);
+        sortMath([...res]);       
+    }else{
+        arrs.push(Math.min(...arr));
+    }
+    console.log(Date.now()) 
+    return arrs
+}
+var arr=[3,44,38,5,47,15,36,26,27,2,46,4,19,19,50,48];
+// console.log(sortarr(arr).reverse())
+
+// console.log(sortMath(arr));
+
+
+// function Animal(name){
+//     this.name= name;
+//     this.say=function(){
+//         console.log(this.name)
+//     }
+// }
+
+// Animal.prototype.eat=function(food){
+//     console.log(this.name+ '吃'+food)
+// }
+
+// function Dog(name,age){
+//     Animal.call(this,name);
+//     this.age = age;  
+//     this.eat =function(){
+//         console.log('dogggggggg'+age)
+//     }  
+
+// }
+// // Dog.prototype = new Animal();
+// Dog.prototype = Animal.prototype;
+
+// Dog.prototype.eat=function(food){
+//     console.log(food)
+// }
+// var dog = new Dog('gougou',44);
+
+// dog.eat('狗粮');
+// console.log(dog instanceof Animal)
+// dog.say()
+
+// var s = new Set([1,2,2,4]);
+// console.log([...s])
+
+function add(){
+    var _args = [...arguments];
+    var _adder =function(){
+        _args.push(...arguments);
+        // [].push.apply(_args,[...arguments]);
+        return _adder;
+    }
+    _adder.toString=function(){
+        return _args.reduce(function(a,b){
+            return a + b;
+        })
+    }
+    return _adder;
+}
+
+// console.log(parseInt(add(3,1)(3)(22)))
+// console.log(parseInt(add(3,1)(3)))
+// var arr= [1,2];
+// var arr2 = arr;
+// arr2[1]=arr[0];
+// arr2.push(5);
+// console.log(arr)
+// console.log(arr2)
+
+// for (var i=1;i<4;i++){
+//     setTimeout(() => {
+//         console.log(i)
+//     }, 0);
+// }
+
+// var http = 'yy?t=p&e=&u';
+// function query(url){
+//    var q = url.split('?')[1].split('&');
+//    var param = {};
+//    for(var i=0;i<q.length;i++){
+//        var obj = q[i].split('=');
+//        if(obj.length==1){
+//           Object.assign(param,{[obj[0]]:undefined})
+//        }else{     
+//           Object.assign(param,{[obj[0]]:obj[1]})
+//        }  
+//    }
+//    return param;
+// }
+
+// console.log(query(http));
+
+// (function(){console.log(4)}());
+
+// var obj = {
+//   0: 'a',
+//   1: 'b',
+//   2: 'c',
+//   length: 3
+// };
+
+// var c = Array.prototype.push.call(obj,'d');
+// obj.length = 3
+// console.log(c)
+// console.log(obj)
+
+// Promise.reject('err')
+//     .then((res)=>{console.log('111')},(res)=>{console.log(res,222)})
+//     .then((res)=>{console.log(res,'aaaa')},()=>{console.log(9999)})
+
+// var obj =new Object({tos:function(){}}) ;
+
+// console.log(obj.hasOwnProperty('toString'))
+
+// Object.prints = function(o){console.log(o)}
+
+// prints('gg');
+
+// var obj = {
+//   get p() {
+//     return 'getter';
+//   },
+//   set p(value) {
+//     console.log('setter: ' + value);
+//   }
+// };
+
+// for(var property in obj){
+//     console.log(obj.hasOwnProperty(property))
+//     console.log(property)
+//     console.log(Object.getOwnPropertyDescriptor(obj, property))
+// }
+
+
+function deepCopy(obj){
+    var copy=Array.isArray(obj)?[]:{};
+    for(var key in obj){
+        if(obj.hasOwnProperty(key)){
+            if(typeof obj[key]=='object'){
+                copy[key]=deepCopy(obj[key])
+            }else{
+                copy[key]=obj[key]
+            }
+        }
+    }
+    return copy;
+}
+
+// var arr = [{a:5},{b:{c:'t'}}];
+// var arr2 = deepCopy(arr);
+// arr2[1].b.c='fff'
+// console.log(arr)
+// console.log(arr2)
+
+
+// var d1 = new Date(2001,1,1);
+// var d2 = new Date(2001,1,5);
+// var diff = d2-d1;
+// console.log(diff/(1000*60*60*24))
+
+// var d = new Date();
+// var dd = new Date(d) ;
+// dd.setMonth(7);
+// console.log(d.toLocaleDateString(),dd.toLocaleDateString())
+
+// var a = /a/g,count = 0;
+// while(a.test('baaba')){   
+//     count++;
+//     console.log(count)
+// }
+
+// var  hw = 'hello world';
+// var ff = hw.replace(/(\w+)\s(\w+)/, '$2 $1');
+// console.log(ff,hw)
+
+var prices = {
+  'p1': '$1.99',
+  'p2': '$9.99',
+  'p3': '$5.00'
+};
+
+var template = '<span id="p1"></span>'
+  + '<span id="p2"></span>'
+  + '<span id="p3"></span>';
+
+var t = template.replace(
+  /(<span id=")(.*?)(">)(<\/span>)/g,
+  function(match, $1, $2, $3, $4){
+    return $1 + $2 + $3 + prices[$2] + $4;
+  }
+);
+
+// var m = 'abcdabc'.match(/abc/);
+// m 
+
+// console.log(m)
+
+// var str = 'abcdabc';
+// var reg = /(.)b(.)/g;
+// while (true) {
+//   var result = reg.exec(str);
+//   if (!result) break;
+//   console.log(result);
+// }
+
+// console.log(/\d+(?=\.)/.exec('3.14'))
+
+// var person1 = {
+//   name: '张三',
+//   age: 38,
+//   greeting: function() {
+//     console.log('Hi! I\'m ' + this.name + '.');
+//   }
+// };
+
+// Object.create(person1)
+// var n=3;
+// var obj = { n: 456 };
+// function a() {
+//   console.log(this.n);
+// }
+// a.call(obj);
+// var aa =Object.create(obj)
+
+// var slice= Function.prototype.call.bind(Array.prototype.slice);
+// var arr = [1,2,3];
+// console.log(slice(arr,0,1))
+// console.log(arr)
+
+// function Person(name){
+//     this.name=name;
+// }
+// Person.prototype ={
+//     method:function(){}
+// }
+// Person.prototype.method = function(){
+   
+// }
+// Person.prototype.constructor=Person;
+
+
+//   console.log(Person.prototype.constructor === Person)
+
+
+// var obj = new Object('sd');
+// obj.prototype = new Object()
+
+// console.log(finalCarousel.init());
+
+var obj1 = { p: {pp:{a:1}}};
+// var obj2 = Object.create(obj1);
+
+// obj1.p = 'rr';
+
+// console.log(Object.getOwnPropertyNames(Date))
+
+// function inheritedPropertyNames(obj) {
+//   var props = {};
+//   while(obj) {
+//     Object.getOwnPropertyNames(obj).forEach(function(p) {
+//       props[p] = true;
+//     });
+//     obj = Object.getPrototypeOf(obj);
+//   }
+//   return Object.getOwnPropertyNames(props);
+// }
+
+// // console.log(inheritedPropertyNames(obj1))
+
+// function copyObject(orig) {
+//   return Object.create(
+//     Object.getPrototypeOf(orig),
+//     Object.getOwnPropertyDescriptors(orig)
+//   );
+// }
+// var p2 = copyObject(obj1)
+// p2.p=44;
+// console.log(obj1)
+// console.log(p2)
+
+
+// function factorial(n){
+//     if(n===1) return 1;
+//     return n*factorial(n-1);
+// }
+
+// function factorial2(n,total){
+//     if(n===1) return total;
+//     return factorial2(n-1,n*total);
+// }
+
+// function  fact(n){
+//   return factorial2(n,1)
+// }
+
+// function Fibonacci(n){
+//     if(n<=1) return 1;
+//     return Fibonacci(n-1) + Fibonacci(n-2); 
+// }     //4 3 2 1     3 1
+
+// function currying(fn, m) {
+//   return function (n) {
+//     return fn.call(this, n, m);
+//   };
+// }
+// function tailFactorial(n, total) {
+//   if (n === 1) return total;
+//   return tailFactorial(n - 1, n * total);
+// }
+// const factorial = currying(tailFactorial, 1);
+// console.log(factorial(5)) ;
+
+// var arr=[1,2];
+// console.log(...arr.values())
+
+// let map=new Map();
+// map.set(new Date(),111);
+
+//  var k = [...map.keys()][0];
+//  console.log(map.entries())
+
+// for (let [key,value] of map.entries()){
+//     console.log(key,value)
+// }
+
+//
+// console.log(location.search)
+// var param  = 'http://www.f.cn?a&b=k&r'
+// var obj = new Map([...new URLSearchParams(param)])
+// Object.fromEntries(obj)
+// function mapToObj(obj){
+//    var o = Object.create(null);
+//    for(let [k,v] of obj.entries()){       
+//       o[k]=v
+//    }
+//    return o
+// }
+
+// var obj2 = {a:1,b:'gg'};
+// function objToMap(obj){
+//     var m = new Map();
+//     for(let k in obj){
+//       m.set(k,obj[k])
+//     }
+//     return m;
+// }
+
+// console.log(objToMap(obj2))
+
+function sortArr(arr){
+    if(arr.length==1) return arr;
+    for(var i=0;i<arr.length-1;i++){
+        for(var j=0;j<arr.length-1-i;j++){
+            if(arr[j]>arr[j+1]){
+                var temp = arr[j];
+                arr[j]=arr[j+1];
+                arr[j+1]=temp
+            }
+        }
+    }
+    return arr;
+}
+
+var arr =[1,3,2,0,-1];
+console.log(sortArr(arr))
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+html {
+    font-size: 14px
+}
+
+@supports(text-shadow: 0 0 .3em gray) {
+    h1 {
+        color: #000;
+        text-shadow: 0 0 .3em gray;
+    }
+}
+
+h1 {
+    margin: 30px;
+    font-size: inherit;
+    box-shadow: 0 0 0px 10px currentColor,
+        0 0 0 15px deeppink,
+        0 2px 5px 15px rgba(0, 0, 0, .6);
+    /* border-radius: 10px; */
+    width: 10vmax;
+    height: 10vmin;
+    /* background: url(../a.jpg) no-repeat top left / 2em 2em, url(../a.jpg) no-repeat bottom left / 2em 2em; */
+    /* background-position: top 20px left 10px; */
+    /* background-size:cover;     */
+    /* background-origin: content-box; */
+    background: #58a linear-gradient(#ccc, #58a);
+    border: 10px dashed rgba(0, 0, 0, .5);
+    background-clip: padding-box;
+    outline: 5px solid blue;
+    outline-offset: -1px;
+}
+
+
+section {
+    display: flex;
+    align-items: center
+}
+
+/*椭圆*/
+section h3 {
+    width: 200px;
+    height: 100px;
+    background: red;
+    margin-right: 50px;
+    /* border-radius: 100% 0 0 100%/50%; */
+    border-radius: 100% 100% 0 0/ 100% 50% 0 0;
+    /* border-radius: 100% 0 0 0; */
+}
+
+/*平行四边形*/
+section h4 {
+    width: 100px;
+    height: 50px;
+    background: transparent;
+    position: relative;
+}
+
+section h4::before {
+    content: '';
+    /* 用伪元素来生成一个矩形 */
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    background: #58a;
+    transform: skew(45deg);
+}
+
+/*菱形 IE11不支持*/
+section img{
+    max-width: 200px;
+    margin: 20px;
+    margin-left:30px;
+	-webkit-clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+	clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+	transition: 1s;
+}
+section img:hover {
+	-webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+	clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/*梯形*/
+section h5{
+    width:100px;
+    height:50px;
+    position: relative;
+    display: inline-block;
+    padding: .5em 1em .35em;
+   
+}
+section h5::before{
+    content: ''; /* 用伪元素来生成一个矩形 */
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: -1;
+    background: #58a;    
+    transform: perspective(0.8em) rotateX(3deg) scaleY(1);
+    transform-origin: bottom right;
+}
+
+/*饼图*/
+section h6{
+    width:100px;
+    height:100px;
+    border-radius: 50%;
+	background: yellowgreen;
+	background-image: linear-gradient(to right, transparent 50%, currentColor 0);
+	color: #655;
+}
+section h6::before {
+	content: '';
+	display: block;
+	margin-left: 50%;
+	height: 100%;
+	border-radius: 0 100% 100% 0 / 50%;
+	background-color: inherit;
+	transform-origin: left;
+    animation: spin 3s linear infinite, bg 6s step-end infinite;
+    /* animation-fill-mode:forwards */
+}
+@keyframes spin {
+	to { transform: rotate(.5turn); }
+}
+@keyframes bg {
+    50% { background: currentColor; }  
+}
+
+/*切角*/
+section div.angle{
+    max-width:100px;
+    height:100px;
+    background: #58a;
+	background: linear-gradient(135deg, transparent 15px, #58a 0) top left,
+	            linear-gradient(-135deg, transparent 15px, #58a 0) top right,
+	            linear-gradient(-45deg, transparent 15px, #58a 0) bottom right,
+	            linear-gradient(45deg, transparent 15px, #58a 0) bottom left;
+	background-size: 50% 50%;
+	background-repeat: no-repeat;	
+	padding: 1em;	
+	color: white;	
+}
+
+section .zhejiao{
+    width:100px;
+    height:100px;
+    background:        
+        /* linear-gradient(to left bottom,
+        transparent 50%, rgba(0,0,0,.4) 0)
+        no-repeat 103% 0 / 3em 3em,
+        linear-gradient(-135deg, transparent 2em, #58a 0); */
+        linear-gradient(to left bottom,
+        transparent 50%, rgba(0,0,0,.4) 0)
+        no-repeat 100% 0 / 3em 2em,
+        linear-gradient(-151deg,
+        transparent 1.5em, #58a 0);
+}
+
+section .zhejiao2{
+    position: relative;
+    width: 12em;
+    margin-left:20px;
+	background: #58a; /* Fallback */
+	background: linear-gradient(-150deg, transparent 1.5em, #58a 0);
+	padding: 2em;
+	color: white;
+	font: 100%/1.6 Baskerville, Palatino, serif;
+	border-radius: .5em;
+}
+
+section .zhejiao2::before {
+	content: '';
+	position: absolute;
+	top: 0; right: 0;
+	width: 1.73em; height: 3em;
+	background: linear-gradient(to left bottom, transparent 50%, rgba(0,0,0,.2) 0, rgba(0,0,0,.4)) 100% 0 no-repeat;
+	transform: translateY(-1.3em) rotate(-30deg);
+	transform-origin: bottom right;
+	border-bottom-left-radius: .5em;
+	box-shadow: -.2em .2em .3em -.1em rgba(0,0,0,.15)
+}
+
+dt, dd {
+	display: inline;
+	margin: 0;
+}
+
+dd {
+	font-weight: 600;
+}
+
+dd + dt::before {
+	content: "\A";
+	white-space: pre;
+}
+
+dd + dd::before {
+	content: ', ';
+	font-weight: normal;
+	margin-left: -.25em;
+}
+
+/*选中第四项之后所有元素*/
+/* ul li:nth-child(3) ~ li{color:red} */
+
+/* li:first-child:nth-last-child(5),
+li:first-child:nth-last-child(5) ~ li {   
+    color:red
+} */
+
+/*选中第四项之后所有元素*/
+/* li:nth-child(n+4){
+    color:red
+} */
+
+/*选中前四项所有元素*/
+li:nth-child(-n+4){
+    color:red
+}
+
+
+/*内圆边角*/
+section h2 {
+    margin: 0 30px;
+    width: 150px;
+    height:60px;
+    background: tan;
+    border-radius: .8em;
+    /* padding: 1em; */
+    box-shadow: 0 0 0 .5em #655;
+    outline: .6em solid #655;   
+}
+
+body > div {
+    column-width: 100px;
+    column-gap: 30px;
+    text-align: justify
+}
