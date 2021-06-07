@@ -1,6 +1,7 @@
 :root{
     font-size:100px
 }
-/* html,body{
-    font-size:200px
-} */
+html,body{
+    /* font-size:200px */
+    margin:0;padding:0
+}
